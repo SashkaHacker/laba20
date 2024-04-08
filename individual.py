@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import json
-from datetime import datetime
 import argparse
+import json
 import os.path
+from datetime import datetime
 
 from validation import ListWorkers
 
@@ -66,7 +66,8 @@ def load_workers(file_name):
     try:
         valid_data = ListWorkers(lst=data)
         data.sort(
-            key=lambda x: datetime.strptime("-".join(x["date"]), "%d-%m-%Y"))
+            key=lambda x: datetime.strptime("-".join(x["date"]), "%d-%m-%Y")
+        )
         return data
     except Exception:
         print("Invalid JSON")
@@ -107,57 +108,42 @@ def main(command_line=None):
     # Создать родительский парсер для определения имени файла.
     file_parser = argparse.ArgumentParser(add_help=False)
     file_parser.add_argument(
-        "filename",
-        action="store",
-        help="The data file name"
+        "filename", action="store", help="The data file name"
     )
     # Создать основной парсер командной строки.
     parser = argparse.ArgumentParser(description="workers")
-    parser.add_argument(
-        "--version",
-        action="version",
-        version="%(prog)s 0.1.0"
-    )
+    parser.add_argument("--version", action="version", version="%(prog)s 0.1.0")
     subparsers = parser.add_subparsers(dest="command")
 
     # Создать субпарсер для добавления работника.
     add = subparsers.add_parser(
-        "add",
-        parents=[file_parser],
-        help="Add a new worker"
+        "add", parents=[file_parser], help="Add a new worker"
     )
     add.add_argument(
-        "-n",
-        "--name",
-        action="store",
-        required=True,
-        help="Имя работника"
+        "-n", "--name", action="store", required=True, help="Имя работника"
     )
     add.add_argument(
-        "-s",
-        "--surname",
-        action="store",
-        help="Фамилия работника"
+        "-s", "--surname", action="store", help="Фамилия работника"
     )
     add.add_argument(
         "-p",
         "--phone",
         action="store",
         required=True,
-        help="Номер телефона работника"
+        help="Номер телефона работника",
     )
     add.add_argument(
         "-d",
         "--date",
         action="store",
         required=True,
-        help="Дата в формате: (число:месяц:год)")
+        help="Дата в формате: (число:месяц:год)",
+    )
 
     # Создать субпарсер для отображения всех работников.
     _ = subparsers.add_parser(
-        "display",
-        parents=[file_parser],
-        help="Display all workers")
+        "display", parents=[file_parser], help="Display all workers"
+    )
 
     # Выполнить разбор аргументов командной строки.
     args = parser.parse_args(command_line)
@@ -170,11 +156,7 @@ def main(command_line=None):
     # Добавить работника.
     if args.command == "add":
         workers = add_worker(
-            lst,
-            args.surname,
-            args.name,
-            args.phone,
-            args.date
+            lst, args.surname, args.name, args.phone, args.date
         )
         is_dirty = True
     # Отобразить всех работников.
